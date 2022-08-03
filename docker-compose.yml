@@ -1,0 +1,20 @@
+services:
+  mysqldb:
+    image: docker.io/bitnami/mysql
+    environment:
+      - MYSQL_ROOT_PASSWORD=root@1010
+      - MYSQL_DATABASE=ft_buffer
+  myapp:
+    image: docker.io/bitnami/laravel:9
+    ports:
+      - '8000:8000'
+    environment:
+      - DB_HOST=mysqldb
+      - DB_PORT=3306
+      - DB_USERNAME=root
+      - DB_PASSWORD=root@1010
+      - DB_DATABASE=ft_buffer
+    volumes:
+      - './ft_buffer:/app'
+    depends_on:
+      - mysqldb
