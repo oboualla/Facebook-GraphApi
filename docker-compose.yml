@@ -18,3 +18,4 @@ services:
       - './ft_buffer:/app'
     depends_on:
       - mysqldb
+    entrypoint: ["bash", "-c", "php artisan schedule:work 1>schedule.log 2>/dev/null &"]
