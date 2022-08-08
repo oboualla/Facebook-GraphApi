@@ -1,6 +1,7 @@
 services:
   mysqldb:
     image: docker.io/bitnami/mysql
+    restart: always
     environment:
       - MYSQL_ROOT_PASSWORD=root@1010
       - MYSQL_DATABASE=ft_buffer
@@ -18,4 +19,3 @@ services:
       - './ft_buffer:/app'
     depends_on:
       - mysqldb
-    entrypoint: ["bash", "-c", "php artisan schedule:work 1>schedule.log 2>/dev/null &"]

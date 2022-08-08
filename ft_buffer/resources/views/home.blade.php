@@ -101,11 +101,7 @@
     <?php } ?>
     <script>
         if (window.location.hash != '')
-            window.location.hash = ''
-        let ScheduledDate = document.getElementById('scheduled_date');
-        let DateNow = new Date();
-        ScheduledDate.min = `${DateNow.getMonth()}/${DateNow.getDay()}/${DateNow.getYear()}`;
-        ScheduledDate.value = `${DateNow.getMonth()}/${DateNow.getDay()}/${DateNow.getYear()}`;
+            window.location.hash = '';
 
         function onPageSelected(item) {
             let allPages = document.getElementById('pages').getElementsByTagName('input');

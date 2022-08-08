@@ -5,10 +5,13 @@ use Illuminate\Http\Request;
 use Facebook\Facebook;
 use Illuminate\Support\Facades\DB;
 use App\Mail\InformPosts;
+use App\Mail\InformWeekly;
 use Illuminate\Support\Facades\Mail;
 
 
-require $_SERVER['DOCUMENT_ROOT'] . '/../facebook_graph_api/index.php';
+// require $_SERVER['DOCUMENT_ROOT'] . '/../facebook_graph_api/index.php';
+require '/app/facebook_graph_api/index.php';
+
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -48,6 +51,17 @@ function LoadClientData()
         $data = $GraphApi->LoadPages();
         $_SESSION['accounts'] = $data['data'];
         $_SESSION['accounts_length'] = count($data['data']);
+
+        // insert user into database if not exits
+        $user = DB::select('select * from users where `user_id`=? limit 1', [$_SESSION['id']]);
+        if (!count($user)) { // user not exit
+            if (!DB::insert('insert into users (user_id, name, email) values (?,?,?)', [$_SESSION['id'], $_SESSION['name'], $_SESSION['email']])) {
+                session_destroy();
+                $_SESSION['_oauth_error'] = 'something went wrong, try again !!';
+                redirect()->to(env('APP_URL', 'http://localhost:8000'))->send();
+                exit;
+            }
+        }
     }
 }
 
@@ -66,13 +80,7 @@ Route::any('/logout', function (Request $request) {
         session_destroy();
         unset($_SESSION['access_token']);
     }
-    // header('Location : http://localhost:8000');
-    $loginUrl = BuildLoginUrl();
-    if (isset($request['code']))
-        $_SESSION['access_token'] = $request['code'];
-    return view('home', [
-        'loginUrl' => $loginUrl
-    ]);
+    redirect()->to(env('APP_URL', 'http://localhost:8000'))->send();
 });
 
 Route::get('/facebook_callback', function (Request $request) {
