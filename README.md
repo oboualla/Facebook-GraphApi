@@ -1,6 +1,6 @@
 ## Features :
 
-this a tool that gives users the ability to do the following:
+#### this a tool that gives users the ability to do the following:
 
 Connect their Facebook account.
 Select some Facebook pages.
